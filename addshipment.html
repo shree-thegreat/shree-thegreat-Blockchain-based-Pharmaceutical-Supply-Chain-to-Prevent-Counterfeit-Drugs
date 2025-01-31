@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturer View</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 2px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid gray;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background-color: #555;
+            font-weight: bold;
+        }
+        .navbar a.active{
+            text-decoration-line: underline;
+        }
+        .sidebar ul li img {
+            width: 20px;
+            margin-right: 10px;
+        }
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+        .navbar {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .manufacturer-view {
+            background-color: blue;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+        .download-btn {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .download-btn:hover {
+            background-color: #333;
+        }
+        .logout-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+   
+    <div class="sidebar">
+        <h2>PHARMACHAIN</h2>
+        <ul>
+            <li class="active"><img src="https://img.icons8.com/ios/50/FFFFFF/factory.png"/> Manufacturer</li>
+            <li><img src="https://img.icons8.com/ios/50/FFFFFF/supplier.png"/> Distributor</li>
+            <li><img src="https://img.icons8.com/ios/50/FFFFFF/pharmacy-shop.png"/> Pharmacy</li>
+            <li><img src="https://img.icons8.com/ios/50/FFFFFF/customer.png"/> Customer</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="navbar">
+            <div>
+                
+                <a href="addbatch.html">Add New Batch</a>
+                <a href="addshipment.html" class="active">Add New Shipment</a>
+                <a href="track.html">Track</a>
+            </div>
+            <div>
+                <span class="manufacturer-view">Manufacturer View</span>
+                <button class="logout-btn">Log out</button>
+            </div>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown mt-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                Documents
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Manufacturer License</a></li>
+                <li><a class="dropdown-item" href="#">Distributor License</a></li>
+                <li><a class="dropdown-item" href="#">Pharmacy License</a></li>
+                <li><a class="dropdown-item" href="#">Batch Details</a></li>
+                <li><a class="dropdown-item" href="#">Shipment Details</a></li>
+            </ul>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <form id="batch-form">
+                    <label>Batch Number</label>
+                    <input type="text" class="form-control" id="batchNumber" required>
+                    <label>Consignment Number</label>
+                    <input type="text" class="form-control" id="consignmentNumber" required>
+                    <label>Product Name</label>
+                    <input type="text" class="form-control" id="productName" required>
+                    <label>Package Size</label>
+                    <input type="text" class="form-control" id="packageSize" required>
+                    <label>Distributor Name</label>
+                    <input type="text" class="form-control" id="distributorName" required>
+                    <label>Transporter Name</label>
+                    <input type="text" class="form-control" id="transporterName" required>
+                    <label>Vehicle Reg Number</label>
+                    <input type="text" class="form-control" id="vehicleReg" required>
+                    <label>Date of Dispatch</label>
+                    <input type="date" class="form-control" id="dispatchDate" required>
+                    <button type="submit" class="btn btn-dark mt-3">Submit</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-bordered" id="batchTable">
+                    <thead>
+                        <tr>
+                            <th>Consignment Number</th>
+                            <th>PDF File</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- New rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("batch-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let batchNumber = document.getElementById("batchNumber").value;
+            let consignmentNumber = document.getElementById("consignmentNumber").value;
+            let productName = document.getElementById("productName").value;
+            let packageSize = document.getElementById("packageSize").value;
+            let distributorName = document.getElementById("distributorName").value;
+            let transporterName = document.getElementById("transporterName").value;
+            let vehicleReg = document.getElementById("vehicleReg").value;
+            let dispatchDate = document.getElementById("dispatchDate").value;
+
+            if (!batchNumber || !consignmentNumber || !productName || !packageSize || !distributorName || !transporterName || !vehicleReg || !dispatchDate) {
+                alert("Please fill all fields before submitting.");
+                return;
+            }
+
+            let tableBody = document.querySelector("#batchTable tbody");
+            let newRow = document.createElement("tr");
+
+            newRow.innerHTML = `
+                <td>${consignmentNumber}</td>
+                <td><button class="btn btn-dark pdf-button" onclick="generatePDF('${batchNumber}', '${consignmentNumber}', '${productName}', '${packageSize}', '${distributorName}', '${transporterName}', '${vehicleReg}', '${dispatchDate}')">Download</button></td>
+            `;
+
+            tableBody.appendChild(newRow);
+            document.getElementById("batch-form").reset();
+        });
+
+        function generatePDF(batchNumber, consignmentNumber, productName, packageSize, distributorName, transporterName, vehicleReg, dispatchDate) {
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text("Batch Details Report", 10, 10);
+
+            doc.setFontSize(12);
+            doc.text(`Batch Number: ${batchNumber}`, 10, 30);
+            doc.text(`Consignment Number: ${consignmentNumber}`, 10, 40);
+            doc.text(`Product Name: ${productName}`, 10, 50);
+            doc.text(`Package Size: ${packageSize}`, 10, 60);
+            doc.text(`Distributor Name: ${distributorName}`, 10, 70);
+            doc.text(`Transporter Name: ${transporterName}`, 10, 80);
+            doc.text(`Vehicle Registration: ${vehicleReg}`, 10, 90);
+            doc.text(`Dispatch Date: ${dispatchDate}`, 10, 100);
+
+            doc.save(`Batch_${batchNumber}.pdf`);
+        }
+        let batchData = {}; // Object to store batch details
+
+document.getElementById("batch-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let batchNumber = document.getElementById("batchNumber").value;
+    let consignmentNumber = document.getElementById("consignmentNumber").value;
+    let productName = document.getElementById("productName").value;
+    let packageSize = document.getElementById("packageSize").value;
+    let distributorName = document.getElementById("distributorName").value;
+    let transporterName = document.getElementById("transporterName").value;
+    let vehicleReg = document.getElementById("vehicleReg").value;
+    let dispatchDate = document.getElementById("dispatchDate").value;
+
+    if (!batchNumber || !consignmentNumber || !productName || !packageSize || !distributorName || !transporterName || !vehicleReg || !dispatchDate) {
+        alert("Please fill all fields before submitting.");
+        return;
+    }
+
+    // Save batch details in the batchData object
+    batchData[batchNumber] = {
+        consignmentNumber,
+        productName,
+        packageSize,
+        distributorName,
+        transporterName,
+        vehicleReg,
+        dispatchDate,
+        manufacturer: "Mak", // Assuming "Mak" is the manufacturer
+        distributor: distributorName,
+        retailer: "", // Empty for now, will be updated later
+        manufacturedDate: dispatchDate,
+        distributedDate: "", // Empty for now
+        retailedDate: "" // Empty for now
+    };
+
+    let tableBody = document.querySelector("#batchTable tbody");
+    let newRow = document.createElement("tr");
+
+    newRow.innerHTML = `
+        <td>${consignmentNumber}</td>
+        <td><button class="btn btn-dark pdf-button" onclick="generatePDF('${batchNumber}')">Download</button></td>
+    `;
+
+    tableBody.appendChild(newRow);
+    document.getElementById("batch-form").reset();
+});
+function updateDistributor(batchNumber, distributor, date) {
+    if (batchData[batchNumber]) {
+        batchData[batchNumber].distributor = distributor;
+        batchData[batchNumber].distributedDate = date;
+    }
+}
+function updateRetailer(batchNumber, retailer, date) {
+    if (batchData[batchNumber]) {
+        batchData[batchNumber].retailer = retailer;
+        batchData[batchNumber].retailedDate = date;
+    }
+}
+
+    </script>
+</body>
+</html>
